@@ -31,46 +31,12 @@ public class CidadeResource {
 	@GetMapping("/lista")
 	public ModelAndView listarCidade() {
 		ModelAndView mv = new ModelAndView("lista_cidade");
-		mv.addObject(new Clima());
+		mv.addObject(new Cidade());
 		List<Cidade> cidade = CidadeRepo.findAll(); // traz todos FindAll
 		mv.addObject("cidade", cidade);
 		return mv;
 	}
 	
-	/*@PostMapping("/salvar")
-	//@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Livro> salvar(@RequestBody Livro livro) {
-		Livro l = livroRepo.save(livro);
-		URI uri = ServletUriComponentsBuilder.
-				fromCurrentServletMapping().path("/{id}").
-				buildAndExpand(l.getId()).
-				toUri();
-		//response.setHeader("Location", uri.toASCIIString());
-		return ResponseEntity.created(uri).body(l);
-	}
-	
-	@GetMapping("/{id}")
-	public Livro buscarPeloId(@PathVariable Long id) {
-		return livroRepo.getOne(id);
-	}
-
-	@PutMapping("/atualizar")
-	public ResponseEntity<Livro> atualizar(@RequestBody Livro livro){
-		Livro l = livroRepo.findById(livro.getId()).get();
-		l.setAutor(livro.getAutor());
-		l.setTitulo(livro.getTitulo());
-		l.setEdicao(livro.getEdicao());
-		l.setNumeroPaginas(livro.getNumeroPaginas());
-		l = livroRepo.save(l);
-		return ResponseEntity.status(HttpStatus.OK).body(l);
-	}
-
-	@DeleteMapping("/{id}")
-	public void excluirPeloId(@PathVariable Long id) {
-		Livro l =  livroRepo.getOne(id);
-		livroRepo.delete(l);
-	}
-	*/
 	
 }
 
