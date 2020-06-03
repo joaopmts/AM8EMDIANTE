@@ -1,7 +1,11 @@
 package AM8EMDIANTE.AM8EMDIANTE.resources;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,9 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.mysql.cj.Query;
+
 import AM8EMDIANTE.AM8EMDIANTE.model.Cidade;
 import AM8EMDIANTE.AM8EMDIANTE.model.Clima;
 import AM8EMDIANTE.AM8EMDIANTE.repository.CidadeRepository;
+import AM8EMDIANTE.AM8EMDIANTE.repository.JPAUtil;
 
 @RestController
 @RequestMapping("/cidade")
@@ -36,7 +43,6 @@ public class CidadeResource {
 		mv.addObject("cidade", cidade);
 		return mv;
 	}
-	
 	
 }
 
