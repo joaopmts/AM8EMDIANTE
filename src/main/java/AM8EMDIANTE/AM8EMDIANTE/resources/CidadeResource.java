@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mysql.cj.Query;
 
 import AM8EMDIANTE.AM8EMDIANTE.model.Cidade;
@@ -30,18 +32,37 @@ import AM8EMDIANTE.AM8EMDIANTE.repository.CidadeRepository;
 import AM8EMDIANTE.AM8EMDIANTE.repository.JPAUtil;
 
 @RestController
-@RequestMapping("/cidade")
+@RequestMapping("/cidades")
 public class CidadeResource {
+
 	@Autowired
-	private CidadeRepository CidadeRepo;
-	
+	private CidadeRepository cidadeRepo;
+
 	@GetMapping("/lista")
-	public ModelAndView listarCidade() {
-		ModelAndView mv = new ModelAndView("lista_cidade");
-		mv.addObject(new Cidade());
-		List<Cidade> cidade = CidadeRepo.findAll(); // traz todos FindAll
-		mv.addObject("cidade", cidade);
-		return mv;
+	@JsonIgnoreProperties
+	public List<Cidade> todasAsCidades() {
+		return cidadeRepo.findAll();
+	}
+
+	@PostMapping("/salvar")
+	// @ResponseStatus (HttpStatus.CREATED)
+	public ResponseEntity<Cidade> salvar(@RequestBody Cidade cidade, HttpServletResponse response) {
+		Cidade c = cidadeRepo.save(cidade);
+		URI uri = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/{id}").buildAndExpand(c.getId())
+				.toUri();
+
+		// response.setHeader("Location", uri.toASCIIString());
+		return ResponseEntity.created(uri).body(c);
+	}
+
+	@GetMapping("/{latitude}" + "/{longitude}")
+	public Cidade buscarPelaLatitudeLongitude(@PathVariable(value="latitude") String latitude, @PathVariable(value="longitude")String longitude) {
+		return cidadeRepo.findByLatitudeAndLongitude(Double.parseDouble(latitude), Double.parseDouble(longitude));
+	}
+	
+	@GetMapping("/{nome}")
+	public List findByLetterName(@PathVariable(value="nome") String nome){
+		return cidadeRepo.findByNomeStartingWith(nome);
 	}
 	
 }
